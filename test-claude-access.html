@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Claude.ai Network Test</title>
+</head>
+<body>
+    <h1>Claude.ai Network Diagnostic</h1>
+    <div id="results"></div>
+
+    <script>
+        const results = document.getElementById('results');
+
+        // Test 1: Can we reach claude.ai at all?
+        fetch('https://claude.ai')
+            .then(r => {
+                results.innerHTML += `<p>✅ Can reach claude.ai (Status: ${r.status})</p>`;
+            })
+            .catch(e => {
+                results.innerHTML += `<p>❌ Cannot reach claude.ai: ${e.message}</p>`;
+            });
+
+        // Test 2: Check if we can make a basic API call
+        fetch('https://claude.ai/api/auth/current', {
+            method: 'GET',
+            credentials: 'include'
+        })
+            .then(r => {
+                results.innerHTML += `<p>API endpoint status: ${r.status} - ${r.statusText}</p>`;
+                if (r.status === 403) {
+                    results.innerHTML += `<p>🚨 <strong>403 Forbidden on API calls - Network or IP is blocked!</strong></p>`;
+                }
+            })
+            .catch(e => {
+                results.innerHTML += `<p>❌ API call failed: ${e.message}</p>`;
+            });
+
+        // Test 3: Check network info
+        results.innerHTML += `<p>User Agent: ${navigator.userAgent}</p>`;
+        results.innerHTML += `<p>Language: ${navigator.language}</p>`;
+    </script>
+</body>
+</html>
